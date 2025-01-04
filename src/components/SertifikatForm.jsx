@@ -2,13 +2,13 @@ import { useState } from "react";
 
 const SertifikatForm = ({ onCheck }) => {
 	const [certificateNumber, setCertificateNumber] = useState("");
-	const [companyName, setCompanyName] = useState("");
-	const [trainingTitle, setTrainingTitle] = useState("");
+	// const [companyName, setCompanyName] = useState("");
+	// const [trainingTitle, setTrainingTitle] = useState("");
 	const [result, setResult] = useState(null);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		const data = await onCheck(certificateNumber, companyName);
+		const data = await onCheck(certificateNumber);
 		setResult(data);
 	};
 

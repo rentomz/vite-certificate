@@ -1,7 +1,7 @@
 import CertificateForm from "../components/SertifikatForm";
 
 const HomePage = () => {
-	const checkCertificate = async (certificateNumber, companyName) => {
+	const checkCertificate = async (certificateNumber) => {
 		try {
 			// Construct the API URL with query parameters
 			const response = await fetch(
@@ -21,9 +21,9 @@ const HomePage = () => {
 			}
 
 			const data = await response.json();
-			if (data.certificateNumber !== null) {
+			if (data.nomorSertifikat !== null) {
 				setStatusMessage(
-					`Certificate Valid: ${data.certificateNumber} - ${data.companyName}`
+					`Certificate Valid: ${data.nomorSertifikat} - ${data.nomorSertifikat}`
 				);
 			} else {
 				setStatusMessage("Certificate Not Found");
