@@ -3,18 +3,16 @@ import CertificateForm from "../components/SertifikatForm";
 const HomePage = () => {
 	const checkCertificate = async (certificateNumber) => {
 		try {
-			// Construct the API URL with query parameters
 			const response = await fetch(
 				`http://localhost:8080/api/v1/csv/${certificateNumber}`,
 				{
-					method: "GET", // Request type
+					method: "GET",
 					headers: {
 						"Content-Type": "application/json",
 					},
 				}
 			);
 
-			// Handle non-200 status codes
 			if (!response.ok) {
 				setStatusMessage("Error: Unable to fetch data");
 				return;

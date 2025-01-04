@@ -48,17 +48,12 @@ const SertifikatForm = ({ onCheck }) => {
 
 			{result && (
 				<div className="mt-6">
-					<p className="font-semibold text-lg">
-						Status Sertifikat: {result.status}
-					</p>
-					{result.status === "Valid" && (
-						<div className="space-y-2 mt-4">
-							<p>Nomor Sertifikat: {result.nomorSertifikat}</p>
-							<p>Nama Perusahaan: {result.nomorSertifikat}</p>
-							<p>Judul Training: {result.nomorSertifikat}</p>
-							<p>Tanggal Upload: {result.nomorSertifikat}</p>
-						</div>
-					)}
+					<div className="space-y-2 mt-4">
+						<p>Nomor Sertifikat: {result.nomorSertifikat}</p>
+						<p>Nama Perusahaan: {result.namaPerusahaan}</p>
+						<p>Judul Training: {result.judulTraining}</p>
+						<p>Tanggal Upload: {result.judulTraining}</p>
+					</div>
 				</div>
 			)}
 		</div>
