@@ -2,39 +2,43 @@ import CertificateForm from "../components/SertifikatForm";
 
 const HomePage = () => {
 	const checkCertificate = async (certificateNumber, companyName) => {
-		const certificates = [
-			{
-				certificateNumber: "12345",
-				companyName: "Company A",
-				trainingTitle: "React Training",
-				uploadDate: "2024-01-01",
-			},
-			{
-				certificateNumber: "67890",
-				companyName: "Company B",
-				trainingTitle: "Node.js Training",
-				uploadDate: "2024-01-02",
-			},
-		];
+		try {
+			// Construct the API URL with query parameters
+			const response = await fetch(
+				`http://localhost:8080/api/v1/csv/${certificateNumber}`,
+				{
+					method: "GET", // Request type
+					headers: {
+						"Content-Type": "application/json",
+					},
+				}
+			);
 
-		const found = certificates.find(
-			(cert) =>
-				cert.certificateNumber === certificateNumber &&
-				cert.companyName === companyName
-		);
+			// Handle non-200 status codes
+			if (!response.ok) {
+				setStatusMessage("Error: Unable to fetch data");
+				return;
+			}
 
-		if (found) {
-			return { status: "Valid", ...found };
-		} else {
-			return { status: "Tidak Ditemukan" };
+			const data = await response.json();
+			if (data.certificateNumber !== null) {
+				setStatusMessage(
+					`Certificate Valid: ${data.certificateNumber} - ${data.companyName}`
+				);
+			} else {
+				setStatusMessage("Certificate Not Found");
+			}
+		} catch (error) {
+			setStatusMessage("An error occurred while fetching the data");
+			console.error("Error fetching certificate:", error);
 		}
 	};
 
 	return (
-		<div >
+		<div>
 			<h2 className="text-2xl font-bold text-center text-gray-800 mb-6 mt-8">
-					Halaman Utama
-				</h2>
+				Halaman Utama
+			</h2>
 			<CertificateForm onCheck={checkCertificate} />
 		</div>
 	);
