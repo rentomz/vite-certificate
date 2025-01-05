@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AdminContext } from "../context/adminContext";
 import LoginPage from "./LoginPage";
 import Cookies from "js-cookie";
@@ -9,6 +9,37 @@ const AdminPage = () => {
 	const [loginError, setLoginError] = useState(false);
 	const [file, setFile] = useState(null);
 
+	const handleGetSertifikat = async () => {
+		try {
+			const response = await fetch("http://localhost:8080/api/v1/sertifikat", {
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json",
+				},
+			});
+
+			if (!response.ok) {
+				const errorMessage = await response.text();
+				console.error("Failed to fetch sertifikat:", errorMessage);
+				alert(`Error fetching data: ${errorMessage}`);
+				return;
+			}
+
+			const data = await response.json();
+			console.log("Sertifikat data:", data);
+			setCertificates(data); // Ensure setCertificates updates your state
+		} catch (error) {
+			console.error("An error occurred while fetching sertifikat:", error);
+			alert("Terjadi kesalahan saat mengambil data sertifikat!");
+		}
+	};
+
+	useEffect(() => {
+		if (isAdmin) {
+			handleGetSertifikat();
+		}
+	}, []);
+
 	const handleFileUpload = async (e) => {
 		const file = e.target.files[0];
 		if (!file) return;
@@ -17,13 +48,16 @@ const AdminPage = () => {
 		formData.append("file", file);
 
 		try {
-			const response = await fetch("http://localhost:8080/api/v1/sertifikat/upload", {
-				method: "POST",
-				body: formData,
-			});
-
-			const data = await response.json();
-			alert(data);
+			const response = await fetch(
+				"http://localhost:8080/api/v1/sertifikat/upload",
+				{
+					method: "POST",
+					body: formData,
+				}
+			);
+			if (response.ok) {
+				handleGetSertifikat();
+			}
 		} catch (error) {
 			console.error("Error uploading file:", error);
 			alert("Terjadi kesalahan saat mengunggah sertifikat!");
