@@ -30,15 +30,44 @@ const AdminPage = () => {
 		setCertificates(newCertificates);
 	};
 
-	const handleLogin = (e, username, password) => {
+	const handleLogin = async (e, username, password) => {
 		e.preventDefault();
-		if (username === "admin" && password === "password123") {
-			setLoginError(false);
-			login();
-		} else {
+	
+		try {
+			const response = await fetch('http://localhost:8080/api/v1/auth/login', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({ username, password }),
+			});
+	
+			if (response.ok) {
+				const data = await response.json();
+				if(data.message) {
+					setLoginError(false);
+					login();
+				} else {
+					console.log('auth salah')
+				}
+			} else {
+				setLoginError(true);
+			}
+		} catch (error) {
+			console.error('Login failed:', error);
 			setLoginError(true);
 		}
 	};
+
+	// const handleLogin = (e, username, password) => {
+	// 	e.preventDefault();
+	// 	if (username === "admin" && password === "password123") {
+	// 		setLoginError(false);
+	// 		login();
+	// 	} else {
+	// 		setLoginError(true);
+	// 	}
+	// };
 
 	return isAdmin ? (
 		<div className="p-4 space-y-6">
