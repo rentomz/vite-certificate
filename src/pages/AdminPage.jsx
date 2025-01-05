@@ -17,19 +17,13 @@ const AdminPage = () => {
 		formData.append("file", file);
 
 		try {
-			const response = await fetch("http://localhost:8080/api/v1/csv/upload", {
+			const response = await fetch("http://localhost:8080/api/v1/sertifikat/upload", {
 				method: "POST",
 				body: formData,
 			});
 
-			if (response.ok) {
-				const data = await response.json();
-				console.log("File uploaded successfully:", data);
-				alert("Sertifikat berhasil diunggah!");
-			} else {
-				console.error("File upload failed:", response.statusText);
-				alert("Gagal mengunggah sertifikat!");
-			}
+			const data = await response.json();
+			alert(data);
 		} catch (error) {
 			console.error("Error uploading file:", error);
 			alert("Terjadi kesalahan saat mengunggah sertifikat!");
