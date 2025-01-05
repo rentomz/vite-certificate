@@ -4,7 +4,7 @@ const HomePage = () => {
 	const checkCertificate = async (certificateNumber) => {
 		try {
 			const response = await fetch(
-				`http://localhost:8080/api/v1/csv/${certificateNumber}`,
+				`http://localhost:8080/api/v1/sertifikat?nomorSertifikat=${encodeURIComponent(certificateNumber)}`,
 				{
 					method: "GET",
 					headers: {

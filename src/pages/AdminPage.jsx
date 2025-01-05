@@ -89,7 +89,7 @@ const AdminPage = () => {
 
 	const handleDeleteCertificate = async (id) => {
 		try {
-			const response = await fetch("http://localhost:8080/api/v1/sertifikat/" + $id, {
+			const response = await fetch("http://localhost:8080/api/v1/sertifikat/" + id, {
 				method: "DELETE",
 				headers: {
 					"Content-Type": "application/json",
