@@ -96,14 +96,15 @@ const AdminPage = () => {
 				},
 			});
 
-			if (!response.ok) {
-				const errorMessage = await response.text();
-				console.error("Failed to fetch sertifikat:", errorMessage);
-				alert(`Error fetching data: ${errorMessage}`);
-				return;
-			}
+			// if (!response.ok) {
+			// 	const errorMessage = await response.text();
+			// 	console.error("Failed to fetch sertifikat:", errorMessage);
+			// 	alert(`Error fetching data: ${errorMessage}`);
+			// 	return;
+			// }
 
 			console.log("Sertifikat data Berhasil dihapus");
+			handleGetSertifikat()
 		} catch (error) {
 			console.error("An error occurred while fetching sertifikat:", error);
 			alert("Terjadi kesalahan saat mengambil data sertifikat!");
