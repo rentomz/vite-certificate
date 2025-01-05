@@ -27,7 +27,7 @@ const AdminPage = () => {
 
 			const data = await response.json();
 			console.log("Sertifikat data:", data);
-			setCertificates(data); // Ensure setCertificates updates your state
+			setCertificates(data);
 		} catch (error) {
 			console.error("An error occurred while fetching sertifikat:", error);
 			alert("Terjadi kesalahan saat mengambil data sertifikat!");
@@ -38,11 +38,14 @@ const AdminPage = () => {
 		if (isAdmin) {
 			handleGetSertifikat();
 		}
-	}, []);
+	}, [isAdmin]);
 
 	const handleFileUpload = async (e) => {
 		const file = e.target.files[0];
-		if (!file) return;
+		if (!file) {
+			alert("No file selected!");
+			return;
+		}
 
 		const formData = new FormData();
 		formData.append("file", file);
@@ -55,8 +58,16 @@ const AdminPage = () => {
 					body: formData,
 				}
 			);
+
 			if (response.ok) {
-				handleGetSertifikat();
+				const message = await response.text();
+				console.log("File uploaded successfully:", message);
+				alert(message || "Sertifikat berhasil diunggah!");
+				await handleGetSertifikat();
+			} else {
+				const errorMessage = await response.text();
+				console.error("Failed to upload file:", errorMessage);
+				alert(`Gagal mengunggah sertifikat: ${errorMessage}`);
 			}
 		} catch (error) {
 			console.error("Error uploading file:", error);
@@ -125,18 +136,27 @@ const AdminPage = () => {
 			<h1 className="text-2xl font-bold">Admin Page</h1>
 
 			<h2 className="text-xl font-semibold">Upload Sertifikat</h2>
-			<input
-				type="file"
-				onChange={handleFileUpload}
-				className="block mb-4 text-sm text-gray-500 border border-gray-300 rounded-md"
-			/>
-			<button
-				type="button"
-				className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
-				onClick={() => document.querySelector('input[type="file"]').click()}
+			<form
+				onSubmit={(e) => {
+					e.preventDefault(); // Prevent default form submission
+					const fileInput = e.target.elements.file;
+					if (fileInput && fileInput.files.length > 0) {
+						handleFileUpload({ target: fileInput });
+					} else {
+						alert("Please select a file before submitting.");
+					}
+				}}
+				className="space-y-4"
 			>
-				Tambah Sertifikat
-			</button>
+				<input type="file" name="file" />
+
+				<button
+					type="submit"
+					className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-green-300"
+				>
+					Tambah Sertifikat
+				</button>
+			</form>
 
 			{/* <form onSubmit={handleAddCertificate} className="space-y-4">
 				<input
@@ -198,16 +218,16 @@ const AdminPage = () => {
 					{certificates.map((cert, index) => (
 						<tr key={index} className="border-b border-gray-200">
 							<td className="py-2 px-4 text-sm text-gray-700">
-								{cert.certificateNumber}
+								{cert.nomorSertifikat}
 							</td>
 							<td className="py-2 px-4 text-sm text-gray-700">
-								{cert.companyName}
+								{cert.namaPerusahaan}
 							</td>
 							<td className="py-2 px-4 text-sm text-gray-700">
-								{cert.trainingTitle}
+								{cert.judulTraining}
 							</td>
 							<td className="py-2 px-4 text-sm text-gray-700">
-								{cert.uploadDate}
+								{cert.tanggalUpload}
 							</td>
 							<td className="py-2 px-4 text-sm">
 								<button
