@@ -87,9 +87,27 @@ const AdminPage = () => {
 		setCertificates([...certificates, certificate]);
 	};
 
-	const handleDeleteCertificate = (index) => {
-		const newCertificates = certificates.filter((_, i) => i !== index);
-		setCertificates(newCertificates);
+	const handleDeleteCertificate = async (id) => {
+		try {
+			const response = await fetch("http://localhost:8080/api/v1/sertifikat/" + $id, {
+				method: "DELETE",
+				headers: {
+					"Content-Type": "application/json",
+				},
+			});
+
+			if (!response.ok) {
+				const errorMessage = await response.text();
+				console.error("Failed to fetch sertifikat:", errorMessage);
+				alert(`Error fetching data: ${errorMessage}`);
+				return;
+			}
+
+			console.log("Sertifikat data Berhasil dihapus");
+		} catch (error) {
+			console.error("An error occurred while fetching sertifikat:", error);
+			alert("Terjadi kesalahan saat mengambil data sertifikat!");
+		}
 	};
 
 	const handleLogin = async (e, username, password) => {
@@ -231,7 +249,7 @@ const AdminPage = () => {
 							</td>
 							<td className="py-2 px-4 text-sm">
 								<button
-									onClick={() => handleDeleteCertificate(index)}
+									onClick={() => handleDeleteCertificate(cert.id)}
 									className="text-red-500 hover:text-red-700 focus:outline-none"
 								>
 									Hapus
