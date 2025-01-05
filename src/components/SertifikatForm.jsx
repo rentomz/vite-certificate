@@ -2,7 +2,7 @@ import { useState } from "react";
 
 const SertifikatForm = ({ onCheck, statusMessage }) => {
 	const [certificateNumber, setCertificateNumber] = useState("");
-	const [result, setResult] = useState(null);
+	const [result, setResult] = useState([]);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -35,13 +35,13 @@ const SertifikatForm = ({ onCheck, statusMessage }) => {
 			)}
 
 			{/* Result Display */}
-			{results.length > 0 && (
+			{result?.length > 0 && (
 				<div className="mt-6">
 					<h3 className="text-lg font-bold text-gray-800 mb-4">
 						Daftar Sertifikat:
 					</h3>
 					<ul className="space-y-4">
-						{results.map((cert, index) => (
+						{result.map((cert, index) => (
 							<li
 								key={index}
 								className="p-4 border border-gray-300 rounded-md bg-gray-50"
