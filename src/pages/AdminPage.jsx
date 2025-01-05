@@ -9,8 +9,31 @@ const AdminPage = () => {
 	const [loginError, setLoginError] = useState(false);
 	const [file, setFile] = useState(null);
 
-	const handleFileUpload = (e) => {
+	const handleFileUpload = async (e) => {
 		const file = e.target.files[0];
+		if (!file) return;
+
+		const formData = new FormData();
+		formData.append("file", file);
+
+		try {
+			const response = await fetch("http://localhost:8080/api/v1/csv/upload", {
+				method: "POST",
+				body: formData,
+			});
+
+			if (response.ok) {
+				const data = await response.json();
+				console.log("File uploaded successfully:", data);
+				alert("Sertifikat berhasil diunggah!");
+			} else {
+				console.error("File upload failed:", response.statusText);
+				alert("Gagal mengunggah sertifikat!");
+			}
+		} catch (error) {
+			console.error("Error uploading file:", error);
+			alert("Terjadi kesalahan saat mengunggah sertifikat!");
+		}
 	};
 
 	const handleAddCertificate = (e) => {
@@ -32,29 +55,29 @@ const AdminPage = () => {
 
 	const handleLogin = async (e, username, password) => {
 		e.preventDefault();
-	
+
 		try {
-			const response = await fetch('http://localhost:8080/api/v1/auth/login', {
-				method: 'POST',
+			const response = await fetch("http://localhost:8080/api/v1/auth/login", {
+				method: "POST",
 				headers: {
-					'Content-Type': 'application/json',
+					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({ username, password }),
 			});
-	
+
 			if (response.ok) {
 				const data = await response.json();
-				if(data.message) {
+				if (data.message) {
 					setLoginError(false);
 					login();
 				} else {
-					console.log('auth salah')
+					console.log("auth salah");
 				}
 			} else {
 				setLoginError(true);
 			}
 		} catch (error) {
-			console.error('Login failed:', error);
+			console.error("Login failed:", error);
 			setLoginError(true);
 		}
 	};
@@ -79,8 +102,15 @@ const AdminPage = () => {
 				onChange={handleFileUpload}
 				className="block mb-4 text-sm text-gray-500 border border-gray-300 rounded-md"
 			/>
+			<button
+				type="button"
+				className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
+				onClick={() => document.querySelector('input[type="file"]').click()}
+			>
+				Tambah Sertifikat
+			</button>
 
-			<form onSubmit={handleAddCertificate} className="space-y-4">
+			{/* <form onSubmit={handleAddCertificate} className="space-y-4">
 				<input
 					type="text"
 					name="certificateNumber"
@@ -113,7 +143,7 @@ const AdminPage = () => {
 				>
 					Tambah Sertifikat
 				</button>
-			</form>
+			</form> */}
 
 			<h2 className="text-xl font-semibold">Data Sertifikat</h2>
 			<table className="w-full table-auto border-collapse border border-gray-300">
