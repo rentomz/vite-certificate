@@ -89,12 +89,15 @@ const AdminPage = () => {
 
 	const handleDeleteCertificate = async (id) => {
 		try {
-			const response = await fetch("http://localhost:8080/api/v1/sertifikat/" + id, {
-				method: "DELETE",
-				headers: {
-					"Content-Type": "application/json",
-				},
-			});
+			const response = await fetch(
+				"http://localhost:8080/api/v1/sertifikat/" + id,
+				{
+					method: "DELETE",
+					headers: {
+						"Content-Type": "application/json",
+					},
+				}
+			);
 
 			// if (!response.ok) {
 			// 	const errorMessage = await response.text();
@@ -104,7 +107,7 @@ const AdminPage = () => {
 			// }
 
 			console.log("Sertifikat data Berhasil dihapus");
-			handleGetSertifikat()
+			handleGetSertifikat();
 		} catch (error) {
 			console.error("An error occurred while fetching sertifikat:", error);
 			alert("Terjadi kesalahan saat mengambil data sertifikat!");
